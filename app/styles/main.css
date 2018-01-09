@@ -19,3 +19,30 @@ path {
     right: 0;
     left: 0;
 }
+
+.land {
+}
+
+.border {
+    stroke: rgb(247, 39, 39);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.bubble {
+    fill-opacity: .5;
+    fill: blue;
+    stroke: rgb(146, 43, 43);
+    stroke-width: .5px;
+}
+
+.legend circle {
+    fill: none;
+    stroke: #ccc;
+}
+
+.legend text {
+    fill: #777;
+    font: 10px sans-serif;
+    text-anchor: middle;
+}

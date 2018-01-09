@@ -1,0 +1,21 @@
+.header {
+    text-align: center;
+}
+
+path {
+    fill: none;
+    stroke: #000;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+#chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}

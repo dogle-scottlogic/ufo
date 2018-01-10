@@ -1,58 +1,85 @@
-var width = 960,
+const width = 960,
     height = 600;
 
-var path = d3.geo.path().projection(null);
+const path = d3.geo.path().projection(null);
 
-var svg = d3.select('#chart').append('svg')
+const tooltip = d3.select('body').append('div')
+    .attr('class', 'tooltip')
+    .style('opacity', 0);
+
+const svg = d3.select('#chart').append('svg')
     .attr('width', width)
     .attr('height', height);
 
-d3.json("scripts/states.json", function (error, us) {
+d3.json('scripts/states.json', (error, us) => {
     if (error) return console.error(error);
 
-    svg.append("path")
+    svg.append('path')
         .datum(topojson.mesh(us))
-        .attr("class", "land")
-        .attr("d", path);
+        .attr('class', 'land')
+        .attr('d', path);
 
-    svg.append("path")
-        .datum(topojson.mesh(us, us.objects.states, function (a, b) {
-            return a !== b;
-        }))
-        .attr("class", "border border--state")
-        .attr("d", path);
+    svg.append('path')
+        .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
+        .attr('class', 'border border--state')
+        .attr('d', path);
 
-    var radius = d3.scale.sqrt()
-        .domain([0, 1e6])
-        .range([0, 500]);
+    const radius = d3.scale.sqrt()
+        .domain([0, 10000])
+        .range([0, 50]);
 
-    svg.append("g")
-        .attr("class", "bubble")
-        .selectAll("circle")
+    const elm = svg.append('g')
+        .attr('class', 'bubble')
+        .selectAll('g')
         .data(topojson.feature(us, us.objects.states).features
-            .sort((a, b) => b.properties.sightings - a.properties.sightings))
-        .enter().append("circle")
-        .attr("transform", function (d) {
-            return "translate(" + path.centroid(d) + ")";
+            .sort((a, b) => b.properties.sightings - a.properties.sightings));
+
+    const showtooltip = (d, i, s) => {
+        tooltip.transition()
+            .duration(200)
+            .style('opacity', 1);
+        tooltip.html('<ul><li><strong>State: ' + d.properties.name + '</strong></li><li>Number of sightings: ' + d.properties.sightings + '</li></ul>');
+    };
+
+    const hidetooltip = (d, i, s) => {
+        tooltip.transition()
+            .duration(200)
+            .style('opacity', 0);
+    };
+
+    const enterElm = elm.enter()
+        .append('g')
+        .attr('transform', (d) => 'translate(' + path.centroid(d) + ')')
+        .on('mouseover', showtooltip)
+        .on('mouseleave', hidetooltip);
+
+
+    const circle = enterElm.append('circle')
+        .attr('r', (d) => d.properties.sightings ? radius(d.properties.sightings) : 0)
+        .on('mouseover', function (d, i) {
+            d3.select(this).attr({
+                fill: '#0000ff'
+            });
         })
-        .attr("r", function (d) {
-            
-            return d.properties.sightings ? radius(d.properties.sightings) : 0;
+        .on('mouseleave', function (d, i) {
+            d3.select(this).attr({
+                fill: '#18cf27'
+            });
         });
-    
-    // var legend = svg.append("g")
-    //     .attr("class", "legend")
-    //     .attr("transform", "translate(" + (width - 50) + "," + (height - 20) + ")")
-    //     .selectAll("g")
-    //     .data([1e6, 3e6, 6e6])
-    //     .enter().append("g");
 
-    // legend.append("circle")
-    //     .attr("cy", function (d) { return -radius(d); })
-    //     .attr("r", radius);
+    var legend = svg.append('g')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(' + (width - 50) + ',' + (height - 20) + ')')
+        .selectAll('g')
+        .data([100, 1000, 5000, 10000])
+        .enter().append('g');
 
-    // legend.append("text")
-    //     .attr("y", function (d) { return -2 * radius(d); })
-    //     .attr("dy", "1.3em")
-    //     .text(d3.format(".1s"));
+    legend.append('circle')
+        .attr('cy', (d) => -radius(d))
+        .attr('r', radius);
+
+    legend.append('text')
+        .attr('y', (d) => (-2 * radius(d)))
+        .attr('dy', '1.3em')
+        .text(d3.format('.1s'));
 });

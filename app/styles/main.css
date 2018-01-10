@@ -20,9 +20,6 @@ path {
     left: 0;
 }
 
-.land {
-}
-
 .border {
     stroke: rgb(247, 39, 39);
     stroke-linejoin: round;
@@ -31,8 +28,8 @@ path {
 
 .bubble {
     fill-opacity: .5;
-    fill: blue;
-    stroke: rgb(146, 43, 43);
+    fill: #18cf27;
+    stroke: #ce2828;
     stroke-width: .5px;
 }
 
@@ -45,4 +42,24 @@ path {
     fill: #777;
     font: 10px sans-serif;
     text-anchor: middle;
+}
+
+.tooltip {
+    width: 200px;
+    height: 50px;
+    border: 1px solid #ce2828;
+    position: absolute;
+    left: 50px;
+    border-radius: 5px;
+    background-color: #18cf2780;
+}
+
+.tooltip ul {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.tooltip li {
+    list-style-type: none;
 }

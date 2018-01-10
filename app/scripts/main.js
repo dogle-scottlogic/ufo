@@ -1,6 +1,62 @@
 const width = 960,
     height = 600;
 
+const state = {
+    'AL': 'Alabama',
+    'AK': 'Alaska',
+    'AZ': 'Arizona',
+    'AR': 'Arkansas',
+    'CA': 'California',
+    'CO': 'Colorado',
+    'CT': 'Connecticut',
+    'DE': 'Delaware',
+    'DC': 'District of Columbia',
+    'FL': 'Florida',
+    'GA': 'Georgia',
+    'HI': 'Hawaii',
+    'ID': 'Idaho',
+    'IL': 'Illinois',
+    'IN': 'Indiana',
+    'IA': 'Iowa',
+    'KS': 'Kansas',
+    'KY': 'Kentucky',
+    'LA': 'Louisiana',
+    'ME': 'Maine',
+    'MD': 'Maryland',
+    'MA': 'Massachusetts',
+    'MI': 'Michigan',
+    'MN': 'Minnesota',
+    'MS': 'Mississippi',
+    'MO': 'Missouri',
+    'MT': 'Montana',
+    'NE': 'Nebraska',
+    'NV': 'Nevada',
+    'NH': 'New Hampshire',
+    'NJ': 'New Jersey',
+    'NM': 'New Mexico',
+    'NY': 'New York',
+    'NC': 'North Carolina',
+    'ND': 'North Dakota',
+    'OH': 'Ohio',
+    'OK': 'Oklahoma',
+    'OR': 'Oregon',
+    'PA': 'Pennsylvania',
+    'RI': 'Rhode Island',
+    'SC': 'South Carolina',
+    'SD': 'South Dakota',
+    'TN': 'Tennessee',
+    'TX': 'Texas',
+    'UT': 'Utah',
+    'VT': 'Vermont',
+    'VA': 'Virginia',
+    'WA': 'Washington',
+    'WV': 'West Virginia',
+    'WI': 'Wisconsin',
+    'WY': 'Wyoming'
+};
+
+const getStateName = (stateCode) => state[stateCode.toUpperCase()];  
+
 const path = d3.geo.path().projection(null);
 
 const tooltip = d3.select('body').append('div')
@@ -38,7 +94,7 @@ d3.json('scripts/states.json', (error, us) => {
         tooltip.transition()
             .duration(200)
             .style('opacity', 1);
-        tooltip.html('<ul><li><strong>State: ' + d.properties.name + '</strong></li><li>Number of sightings: ' + d.properties.sightings + '</li></ul>');
+        tooltip.html('<ul><li><strong>State: ' + getStateName(d.properties.name) + '</strong></li><li>Number of sightings: ' + d.properties.sightings + '</li></ul>');
     };
 
     const hidetooltip = (d, i, s) => {
